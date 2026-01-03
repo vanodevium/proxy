@@ -1,0 +1,24 @@
+name: "proxy"
+
+services:
+
+  traefik:
+    image: "traefik:3"
+    restart: always
+    env_file: .env
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.https.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: "traefik"
